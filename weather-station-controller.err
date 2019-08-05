@@ -1,0 +1,8 @@
+>>> Warning 216 "Projeto 1.c" Line 679(0,1): Interrupts disabled during call to prevent re-entrancy:  (tempo)
+>>> Warning 216 "Projeto 1.c" Line 679(0,1): Interrupts disabled during call to prevent re-entrancy:  (@delay_ms2)
+>>> Warning 216 "Projeto 1.c" Line 679(0,1): Interrupts disabled during call to prevent re-entrancy:  (escreve)
+>>> Warning 216 "Projeto 1.c" Line 679(0,1): Interrupts disabled during call to prevent re-entrancy:  (limpa)
+>>> Warning 216 "Projeto 1.c" Line 679(0,1): Interrupts disabled during call to prevent re-entrancy:  (teclado)
+>>> Warning 216 "Projeto 1.c" Line 679(0,1): Interrupts disabled during call to prevent re-entrancy:  (menu)
+      Memory usage:   ROM=79%      RAM=20% - 31%
+      0 Errors,  6 Warnings.

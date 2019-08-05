@@ -1,0 +1,77 @@
+#include <16f887.h>
+#include <regs_887.h>
+#use delay(clock=4MHz)
+#include <display.h>
+#fuses INTRC_IO
+
+void converte_temp(void);
+//void converte_umdd(void);
+//void converte_pres(void);
+//void converte_vent(void);
+void mostra (void);
+
+int16 t0, t1, t2, t3, t4;
+
+void main(void)
+{
+char texto[21];
+TRISD=0; TRISE=0;
+inicializa();
+TRISA=0x01;
+ANSEL=0x01;
+ADCS1=1; ADCS0=1;
+CHS3=0;CHS2=0;CHS1=0;CHS0=0;
+ADFM=1;
+VCFG1=0;
+VCFG0=0;
+ADON=1;
+
+strcpy(texto,"   TERMOMOETRO ");
+escreve (0x82,texto);
+strcpy(texto,"Temp:");
+escreve (0x96,texto);
+while (true)
+{
+converte_temp();
+mostra();
+}}
+
+void converte_temp(){
+
+int16 palavra=0, valor=0; float vad=0;
+
+GO_DONE=1; // Inicia conversão.
+while (GO_DONE); // Aguarda conversão terminar.
+palavra=ADRESH*256+ADRESL;  // Desloca resultado high e soma com low.
+vad=((10.0*palavra)/1023)*1000; // Obtem valor correspondente a leitura em escala de 0 à 100.
+t4=20;
+if (vad>5000)
+{
+vad=(vad-4995); // Retifica a leitura de 50 -- 100 para 0 -- 50.
+t4=0x2B; // Inclui o sinal "+" na temperatura.
+}
+else if (vad<4994)
+{
+vad=(vad-4995); // Retifica a leitura de 0 -- 50 para -50 -- 0. 
+vad=-vad;
+t4=0x2D;  // Inclui o sinal "-" na temperatura.
+}
+else vad=0;
+valor=(int16)vad;
+t3=valor/1000;
+t2=(valor%1000)/100;
+t1=(valor%100)/10;
+t0=(valor%10);
+}
+
+void mostra (void)
+{
+RS=0; DADO=0x9G; tempo(); DADO=swap(DADO); tempo(); RS=1;
+DADO=t4; tempo(); DADO=swap(DADO); tempo();
+DADO=t3+0x30; tempo(); DADO=swap(DADO); tempo();
+DADO=t2+0x30; tempo(); DADO=swap(DADO); tempo();
+DADO=','; tempo(); DADO=swap(DADO); tempo();
+DADO=t1+0x30; tempo(); DADO=swap(DADO); tempo();
+DADO=t0+0x30; tempo(); DADO=swap(DADO); tempo();
+
+}
